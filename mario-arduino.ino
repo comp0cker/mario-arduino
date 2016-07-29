@@ -34,24 +34,40 @@ void setup() {
   m.add_channel(&pin6); // adds the pins we defined earlier to the three channels we're going to make: melody, harmony, and bass
   m.add_channel(&pin7);
   m.add_channel(&pin8);
+ 
 
-  lcd.begin(16, 2);
-  lcd.print("hello!");
 }
 
 void loop() {
+
+    lcd.clear();
+    lcd.begin(16, 2);
+    lcd.print("Now Playing:");
+    lcd.setCursor(0,1);
+    lcd.print("Overworld Theme");
+    
     {intro (pin6, pin7, pin8);} // these 4 queue the theme for the overworld
     {song (pin6, pin7, pin8);}
     {intro (pin6, pin7, pin8);}
     {ending (pin6, pin7, pin8);}
 
+    lcd.clear();
+    lcd.begin(16, 2);
+    lcd.print("Now Playing:");
+    lcd.setCursor(0,1);
+    lcd.print("Underworld Theme");
+
     {underworld (pin6, pin7, pin8);} // queues underworld (repeats once)
     {underworld (pin6, pin7, pin8);}
 
+    lcd.clear();
+    lcd.begin(16, 2);
+    lcd.print("Now Playing:");
+    lcd.setCursor(0,1);
+    lcd.print("Underwater Theme");
+
     {underwater (pin6, pin7, pin8);} // queues underwater (repeats once)
     {underwater (pin6, pin7, pin8);}
-
-    exit(1);
 }
 
 inline void underwater(channel &melody, channel &harmony, channel &bass){
@@ -977,6 +993,10 @@ inline void underworld(channel &melody, channel &bass, channel &bbass){
   bb.tone = 1;
   bb.duration = EIGHTH * 2;
 
+  note bbTRIP;
+  bbTRIP.tone = 1;
+  bbTRIP.duration = EIGHTH * 4 /3; 
+
   note bTRIP;
   bTRIP.tone = 2;
   bTRIP.duration = EIGHTH * 4 /3; 
@@ -1163,7 +1183,7 @@ inline void underworld(channel &melody, channel &bass, channel &bbass){
   melody.queue(&low_gbTRIP);
   melody.queue(&low_fTRIP);
   melody.queue(&low_eTRIP);
-  melody.queue(&bTRIP);
+  melody.queue(&bbTRIP);
   melody.queue(&aTRIP);
   melody.queue(&abTRIP);
   melody.queue(&trest);
@@ -1177,12 +1197,13 @@ inline void underworld(channel &melody, channel &bass, channel &bbass){
   melody.queue(&trest);
   melody.queue(&low_abTRIP);
   melody.queue(&trest);
+  melody.queue(&qrest);
 
   bass.queue(&lower_cTRIP);
   bass.queue(&lower_gbTRIP);
   bass.queue(&lower_fTRIP);
   bass.queue(&lower_eTRIP);
-  bass.queue(&low_bTRIP);
+  bass.queue(&low_bbTRIP);
   bass.queue(&low_aTRIP);
   bass.queue(&low_abTRIP);
   bass.queue(&trest);
@@ -1196,12 +1217,13 @@ inline void underworld(channel &melody, channel &bass, channel &bbass){
   bass.queue(&trest);
   bass.queue(&lower_abTRIP);
   bass.queue(&trest);
+  bass.queue(&qrest);
   
   bbass.queue(&lower_cTRIP);
   bbass.queue(&lower_gbTRIP);
   bbass.queue(&lower_fTRIP);
   bbass.queue(&lower_eTRIP);
-  bbass.queue(&low_bTRIP);
+  bbass.queue(&low_bbTRIP);
   bbass.queue(&low_aTRIP);
   bbass.queue(&low_abTRIP);
   bbass.queue(&trest);
@@ -1215,6 +1237,7 @@ inline void underworld(channel &melody, channel &bass, channel &bbass){
   bbass.queue(&trest);
   bbass.queue(&lower_abTRIP);
   bbass.queue(&trest);
+  bbass.queue(&qrest);
 
   note stop;
   stop.tone = STOP;
